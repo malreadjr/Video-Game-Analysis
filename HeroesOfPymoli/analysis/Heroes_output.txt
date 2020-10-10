@@ -1,0 +1,120 @@
+import pandas as pd
+
+working_file = "Resources/purchase_data.csv"
+
+purchase_data_df = pd.read_csv(working_file)
+
+unique_value = purchase_data_df["SN"].nunique()
+print("Total Players")
+print(unique_value)
+
+summary_df = pd.DataFrame({"Total Players": [unique_value]})
+summary_df
+
+Num_unique = len(purchase_data_df["Item ID"].unique())
+print(Num_unique)
+
+Average_price = purchase_data_df["Price"].mean()
+print(Average_price)
+
+Num_purchase = purchase_data_df["Purchase ID"].count()
+print(Num_purchase)
+
+Total_revenue = purchase_data_df["Price"].sum()
+print(Total_revenue)
+
+summary_df = pd.DataFrame({"Number of Unique Items": [Num_unique],
+                              "Average Price": [Average_price],
+                              "Number of Purchases": [Num_purchase],
+                              "Total Revenue": [Total_revenue]})
+summary_df
+
+pdfmale = purchase_data_df.copy()
+pdffemale = purchase_data_df.copy()
+pdfother = purchase_data_df.copy()
+
+unique_sn_males = purchase_data_df[['SN','Gender']]
+filter_male = pdfmale['Gender']=="Male"
+filter_female = pdffemale['Gender']=="Female"
+filter_other = pdfother['Gender']=="Other / Non-Disclosed"
+
+pdfmale.where(filter_male,inplace=True)
+pdffemale.where(filter_female,inplace=True)
+pdfother.where(filter_other,inplace=True)
+
+summary_df = pd.DataFrame({"Total Count": [pdfmale['SN'].nunique(),pdffemale['SN'].nunique(),pdfother['SN'].nunique()], 
+"Percentage of Players":['{:,.2%}'.format(pdfmale['SN'].nunique() / unique_value),'{:,.2%}'.format(pdffemale['SN'].nunique()/unique_value),'{:,.2%}'.format(pdfother['SN'].nunique()/unique_value)]},
+index=['Male', 'Female', 'Other / Non-Disclosed'])
+
+summary_df
+
+pdfmale = purchase_data_df.copy()
+pdffemale = purchase_data_df.copy()
+pdfother = purchase_data_df.copy()
+
+filter_male = pdfmale['Gender']=="Male"
+filter_female = pdffemale['Gender']=="Female"
+filter_other = pdfother['Gender']=="Other / Non-Disclosed"
+
+pdfmale.where(filter_male,inplace=True)
+pdffemale.where(filter_female,inplace=True)
+pdfother.where(filter_other,inplace=True)
+
+summary_df = pd.DataFrame({"Purchase Count": ["",pdffemale['SN'].count(),pdfmale['SN'].count(),pdfother['SN'].count()],
+"Average Purchase Price": ["",'${:,.2f}'.format(pdffemale['Price'].mean()),'${:,.2f}'.format(pdfmale['Price'].mean()),'${:,.2f}'.format(pdfother['Price'].mean())],
+"Total Purchase Value": ["",'${:,.2f}'.format(pdffemale['Price'].sum()),'${:,.2f}'.format(pdfmale['Price'].sum()),'${:,.2f}'.format(pdfother['Price'].sum())],
+"Avg Total Purchase per Person": ["",'${:,.2f}'.format(pdffemale['Price'].sum()/pdffemale['SN'].nunique()),'${:,.2f}'.format(pdfmale['Price'].sum()/pdfmale['SN'].nunique()),'${:,.2f}'.format(pdfother['Price'].sum()/pdfother['SN'].nunique())]
+},
+index=['Gender','Female','Male', 'Other / Non-Disclosed'])
+
+summary_df
+
+pdfmale = purchase_data_df.copy()
+pdffemale = purchase_data_df.copy()
+pdfother = purchase_data_df.copy()
+
+filter_male = pdfmale['Gender']=="Male"
+filter_female = pdffemale['Gender']=="Female"
+filter_other = pdfother['Gender']=="Other / Non-Disclosed"
+
+pdfmale.where(filter_male,inplace=True)
+pdffemale.where(filter_female,inplace=True)
+pdfother.where(filter_other,inplace=True)
+
+summary_df = pd.DataFrame({"Purchase Count": ["",pdffemale['SN'].count(),pdfmale['SN'].count(),pdfother['SN'].count()],
+"Average Purchase Price": ["",'${:,.2f}'.format(pdffemale['Price'].mean()),'${:,.2f}'.format(pdfmale['Price'].mean()),'${:,.2f}'.format(pdfother['Price'].mean())],
+"Total Purchase Value": ["",'${:,.2f}'.format(pdffemale['Price'].sum()),'${:,.2f}'.format(pdfmale['Price'].sum()),'${:,.2f}'.format(pdfother['Price'].sum())],
+"Avg Total Purchase per Person": ["",'${:,.2f}'.format(pdffemale['Price'].sum()/pdffemale['SN'].nunique()),'${:,.2f}'.format(pdfmale['Price'].sum()/pdfmale['SN'].nunique()),'${:,.2f}'.format(pdfother['Price'].sum()/pdfother['SN'].nunique())]
+},
+index=['Gender','Female','Male', 'Other / Non-Disclosed'])
+
+summary_df
+
+
+
+pdfage = purchase_data_df.copy()
+
+summary_df = pd.DataFrame(
+{
+    "Total Count":[
+        pdfage.where(pdfage['Age']<10)['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(10,14))['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(15,19))['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(20,24))['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(25,29))['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(30,34))['SN'].nunique(),
+        pdfage.where(pdfage['Age'].between(35,39))['SN'].nunique(),
+        pdfage.where(pdfage['Age']>=40)['SN'].nunique()
+        ],
+"Percentage of Players":[
+    '{:,.2%}'.format(pdfage.where(pdfage['Age']<10)['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(10,14))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(15,19))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(20,24))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(25,29))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(30,34))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age'].between(35,39))['SN'].nunique()/pdfage['SN'].nunique()),
+    '{:,.2%}'.format(pdfage.where(pdfage['Age']>=40)['SN'].nunique()/pdfage['SN'].nunique())]
+    },
+index=['<10','10-14','15-19','20-24','25-29','30-34','35-39','40+'])
+summary_df
